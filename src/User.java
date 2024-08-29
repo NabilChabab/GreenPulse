@@ -5,6 +5,7 @@ public class User {
     private String name;
     private int age;
 
+
     private int idCounter = 1;
 
     public User(String name, int age) {

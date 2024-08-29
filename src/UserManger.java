@@ -64,5 +64,21 @@ public class UserManger {
         }
     }
 
+    public void deleteUser(){
+        System.out.print("Enter the Id to delete a user : ");
+        int userId = scanner.nextInt();
+        User user = userMap.get(userId);
+        if (user != null){
+            userMap.remove(userId);
+            System.out.println("User " + user.getName() + " deleted successfully");
+        }else {
+            System.out.println("User not found");
+        }
+    }
+
+    public void calculateConsumption(){
+
+    }
+
 
 }
