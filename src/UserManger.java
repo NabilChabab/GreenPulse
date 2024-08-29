@@ -76,9 +76,6 @@ public class UserManger {
         }
     }
 
-    public void calculateConsumption(){
-
-    }
 
 
 }
