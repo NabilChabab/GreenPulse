@@ -49,6 +49,13 @@ public class Menu {
                 case 7 :
                     userManger.generateReportForUserById();
                     break;
+                case 8 :
+                    System.exit(0);
+                    break;
+                default :
+                    System.out.println("Invalid choice");
+                    break;
+
             }
         }
     }

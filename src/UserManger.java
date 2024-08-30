@@ -90,7 +90,7 @@ public class UserManger {
     }
 
     public void generateConsumptionReport() {
-        consumptionManager.generateReportForAllUsers(userMap);  // Delegate to ConsumptionManager
+        consumptionManager.generateReportForAllUsers(userMap);
     }
 
 
