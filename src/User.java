@@ -1,9 +1,12 @@
+import java.util.List;
+
 public class User {
 
 
     private int id;
     private String name;
     private int age;
+    private List<ConsumptionEntity> consumptions;
 
 
     private int idCounter = 1;
@@ -14,6 +17,9 @@ public class User {
         this.age = age;
     }
 
+    public User() {
+    }
+
     public int getId() {
         return id;
     }
@@ -22,20 +28,16 @@ public class User {
         return name;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public void addCarbonConsumption(ConsumptionEntity consumption) {
+        this.consumptions.add(consumption);
     }
 
 
