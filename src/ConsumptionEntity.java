@@ -18,6 +18,9 @@ public class ConsumptionEntity {
         this.endDate = endDate;
     }
 
+    public ConsumptionEntity() {
+    }
+
     public int getId() {
         return id;
     }

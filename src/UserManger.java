@@ -8,6 +8,8 @@ public class UserManger {
     private Scanner scanner = new Scanner(System.in);
     private HashMap<Integer , User> userMap = new HashMap<>();
 
+    private ConsumptionManager consumptionManager = new ConsumptionManager();
+
     public void createUser(){
 
         System.out.print("Enter user name: ");
@@ -74,6 +76,17 @@ public class UserManger {
         }else {
             System.out.println("User not found");
         }
+    }
+
+
+    public void calculateUserConsumption(){
+
+        System.out.println("Enter User Id : ");
+
+        int id = scanner.nextInt();
+        User user = userMap.get(id);
+
+        consumptionManager.addConsumption(user);
     }
 
 
