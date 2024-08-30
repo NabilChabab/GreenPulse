@@ -89,6 +89,18 @@ public class UserManger {
         consumptionManager.addConsumption(user);
     }
 
+    public void generateConsumptionReport() {
+        consumptionManager.generateReportForAllUsers(userMap);  // Delegate to ConsumptionManager
+    }
+
+
+    public void generateReportForUserById() {
+        System.out.println("Enter User Id : ");
+        int userId = scanner.nextInt();
+        consumptionManager.generateReportByUserId(userMap , userId);
+
+    }
+
 
 
 }

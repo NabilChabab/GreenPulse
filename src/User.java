@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -9,12 +10,13 @@ public class User {
     private List<ConsumptionEntity> consumptions;
 
 
-    private int idCounter = 1;
+    private static int idCounter = 1;
 
     public User(String name, int age) {
         this.id = idCounter++;
         this.name = name;
         this.age = age;
+        consumptions = new ArrayList<>();
     }
 
     public User() {
@@ -22,6 +24,10 @@ public class User {
 
     public int getId() {
         return id;
+    }
+
+    public List<ConsumptionEntity> getConsumptions() {
+        return consumptions;
     }
 
     public String getName() {
@@ -38,6 +44,12 @@ public class User {
 
     public void addCarbonConsumption(ConsumptionEntity consumption) {
         this.consumptions.add(consumption);
+    }
+
+    public double calculateTotalCarbon() {
+        return consumptions.stream()
+                .mapToDouble(ConsumptionEntity::getValue)
+                .sum();
     }
 
 

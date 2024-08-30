@@ -1,5 +1,7 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsumptionManager {
@@ -27,6 +29,39 @@ public class ConsumptionManager {
             user.addCarbonConsumption(consumptionEntity);
 
             System.out.println("Consumption added for user with Id" + user.getId());
+        }
+        else {
+            System.out.println("user not found");
+        }
+    }
+
+    public void generateConsumptionReport(User user) {
+
+        if (user != null) {
+            List<ConsumptionEntity> consumptions = user.getConsumptions();
+            System.out.println("Carbon Consumption Report for User: " + user.getName());
+            for (ConsumptionEntity consumption : consumptions) {
+                System.out.println(consumption);
+            }
+            System.out.println("Total Carbon Consumption: " + user.calculateTotalCarbon() + " kg");
+        } else {
+            System.out.println("User not found.");
+        }
+    }
+
+    public void generateReportForAllUsers(HashMap<Integer, User> userMap) {
+        System.out.println("Generating consumption report for all users...");
+        for (User user : userMap.values()) {
+            generateConsumptionReport(user);
+        }
+    }
+
+    public void generateReportByUserId(HashMap<Integer, User> userMap , int userId) {
+        System.out.println("Generating consumption report for user with Id: " + userId);
+        User user = userMap.get(userId);
+
+        if (user != null) {
+            generateConsumptionReport(user);
         }
         else {
             System.out.println("user not found");
