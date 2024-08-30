@@ -6,5 +6,10 @@ public class Main {
 
     public static void main(String[] args) {
 
+        UserManger userManger = new UserManger();
+        Menu menu = new Menu();
+
+        menu.start();
+
     }
 }

@@ -33,7 +33,7 @@ public class ConsumptionEntity {
         return value;
     }
 
-    public void setValue(double value) {
+    public  void setValue(double value) {
         this.value = value;
     }
 
