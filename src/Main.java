@@ -1,3 +1,6 @@
+import services.UserService;
+import ui.Menu;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -5,10 +8,8 @@ public class Main {
 
 
     public static void main(String[] args) {
-
-        UserManger userManger = new UserManger();
-        Menu menu = new Menu();
-
+        UserService userService = new UserService();
+        Menu menu = new Menu(userService);
         menu.start();
 
     }
