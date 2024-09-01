@@ -1,7 +1,9 @@
+package entities;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class UserEntity {
 
 
     private int id;
@@ -12,14 +14,14 @@ public class User {
 
     private static int idCounter = 1;
 
-    public User(String name, int age) {
+    public UserEntity(String name, int age) {
         this.id = idCounter++;
         this.name = name;
         this.age = age;
         consumptions = new ArrayList<>();
     }
 
-    public User() {
+    public UserEntity() {
     }
 
     public int getId() {
@@ -42,7 +44,7 @@ public class User {
         this.age = age;
     }
 
-    public void addCarbonConsumption(ConsumptionEntity consumption) {
+    public void addConsumption(ConsumptionEntity consumption) {
         this.consumptions.add(consumption);
     }
 
@@ -54,6 +56,6 @@ public class User {
 
 
     public String toString() {
-        return "User [id=" + id + ", name=" + name + ", age=" + age + "]";
+        return "entities.UserEntity [id=" + id + ", name=" + name + ", age=" + age + "]";
     }
 }
