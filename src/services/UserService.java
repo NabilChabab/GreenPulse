@@ -2,8 +2,8 @@ package services;
 
 import entities.ConsumptionEntity;
 import entities.UserEntity;
-import exeptions.ReportExeption;
 
+import utils.ConsoleUtils;
 import utils.DateUtils;
 
 import java.util.HashMap;
@@ -85,37 +85,47 @@ public class UserService {
 
 
 
-    public void generateReportForUserById(int userId , String reportType) {
+    public void generateReportForUserById(int userId ,  String reportType) {
         UserEntity user = userMap.get(userId);
+
         if (user != null) {
-            reportType = reportType.trim().toLowerCase();
-            System.out.println("Generating " + reportType + " report for user ID: " + userId);
-
             double average;
-            try {
-                switch (reportType) {
-                    case "daily":
-                        average = consumptionService.dailyAverage(user);
-                        System.out.println("Daily Average Carbon Consumption: " + average + " kg");
-                        break;
-                    case "weekly":
-                        average = consumptionService.weeklyAverage(user);
-                        System.out.println("Weekly Average Carbon Consumption: " + average + " kg");
-                        break;
-                    case "monthly":
-                        average = consumptionService.monthlyAverage(user);
-                        System.out.println("Monthly Average Carbon Consumption: " + average + " kg");
-                        break;
-                    default:
-                        throw new ReportExeption("Invalid report type: " + reportType);
-                }
-            } catch (ReportExeption e) {
-                System.out.println(e.getMessage());
+            switch (reportType.toLowerCase()) {
+                case "daily":
+                    average = consumptionService.dailyAverage(user);
+                    break;
+                case "weekly":
+                    average = consumptionService.weeklyAverage(user);
+                    break;
+                case "monthly":
+                    average = consumptionService.monthlyAverage(user);
+                    break;
+                default:
+                    System.out.println(ConsoleUtils.RED + "Invalid report type." + ConsoleUtils.RESET);
+                    return;
             }
-        } else {
-            System.out.println("User not found.");
-        }
 
+            displayReport(userId , reportType, average);
+        } else {
+            System.out.println(ConsoleUtils.RED + "User not found." + ConsoleUtils.RESET);
+        }
+    }
+
+    private void displayReport(int userId, String reportType, double average) {
+        System.out.println(ConsoleUtils.CYAN + ConsoleUtils.BOLD + "\nCarbon Consumption Report" + ConsoleUtils.RESET);
+        ConsoleUtils.printLine('=', 100);
+        System.out.println(
+                ConsoleUtils.formatCell("User ID", 30) + "| " +
+                        ConsoleUtils.formatCell("Report Type", 40) + "| " +
+                        ConsoleUtils.formatCell("Average Consumption (kg)", 40)
+        );
+        ConsoleUtils.printLine('-', 100);
+        System.out.println(
+                ConsoleUtils.formatCell(String.valueOf(userId), 30) + "| " +
+                        ConsoleUtils.formatCell(reportType, 40) + "| " +
+                        ConsoleUtils.formatCell(String.format("%.2f", average), 40)
+        );
+        ConsoleUtils.printLine('=', 100);
     }
 
 

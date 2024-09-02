@@ -11,4 +11,6 @@ public class DateUtils {
     public static Date parseDate(String dateStr) throws ParseException {
         return DATE_FORMAT.parse(dateStr);
     }
+
+
 }
