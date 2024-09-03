@@ -7,7 +7,7 @@ import utils.ConsoleUtils;
 import utils.DateUtils;
 
 import java.util.HashMap;
-
+import java.util.List;
 
 
 public class UserService {
@@ -85,30 +85,84 @@ public class UserService {
 
 
 
-    public void generateReportForUserById(int userId ,  String reportType) {
+    public void generateReportForUserById(int userId, String reportType) {
         UserEntity user = userMap.get(userId);
 
         if (user != null) {
-            double average;
+            List<ConsumptionEntity> consumptions = user.getConsumptions();
+            if (consumptions.isEmpty()) {
+                System.out.println(ConsoleUtils.RED + "No consumption data found for user." + ConsoleUtils.RESET);
+                return;
+            }
+
+            // Get averages based on report type
             switch (reportType.toLowerCase()) {
                 case "daily":
-                    average = consumptionService.dailyAverage(user);
+                    List<Double> dailyAverages = consumptionService.getDailyAverages(user, consumptions.get(0).getStartDate(), consumptions.get(consumptions.size() - 1).getEndDate());
+                    displayDetailedReport(userId, reportType, dailyAverages);
                     break;
                 case "weekly":
-                    average = consumptionService.weeklyAverage(user);
+                    List<Double> weeklyAverages = consumptionService.getWeeklyAverages(user, consumptions.get(0).getStartDate(), consumptions.get(consumptions.size() - 1).getEndDate());
+                    displayDetailedReport(userId, reportType, weeklyAverages);
                     break;
                 case "monthly":
-                    average = consumptionService.monthlyAverage(user);
+                    List<Double> monthlyAverages = consumptionService.getMonthlyAverages(user, consumptions.get(0).getStartDate(), consumptions.get(consumptions.size() - 1).getEndDate());
+                    displayDetailedReport(userId, reportType, monthlyAverages);
                     break;
                 default:
                     System.out.println(ConsoleUtils.RED + "Invalid report type." + ConsoleUtils.RESET);
                     return;
             }
 
-            displayReport(userId , reportType, average);
+            displayAllConsumptions(consumptions);
+
         } else {
             System.out.println(ConsoleUtils.RED + "User not found." + ConsoleUtils.RESET);
         }
+    }
+
+    private void displayAllConsumptions(List<ConsumptionEntity> consumptions) {
+        System.out.println(ConsoleUtils.CYAN + ConsoleUtils.BOLD + "\nAll Consumptions" + ConsoleUtils.RESET);
+        ConsoleUtils.printLine('=', 100);
+        System.out.println(
+                ConsoleUtils.formatCell("Consumption ID", 20) + "| " +
+                        ConsoleUtils.formatCell("Start Date", 30) + "| " +
+                        ConsoleUtils.formatCell("End Date", 30) + "| " +
+                        ConsoleUtils.formatCell("Value (kg)", 20)
+        );
+        ConsoleUtils.printLine('-', 100);
+
+        for (ConsumptionEntity consumption : consumptions) {
+            System.out.println(
+                    ConsoleUtils.formatCell(String.valueOf(consumption.getId()), 20) + "| " +
+                            ConsoleUtils.formatCell(consumption.getStartDate().toString(), 30) + "| " +
+                            ConsoleUtils.formatCell(consumption.getEndDate().toString(), 30) + "| " +
+                            ConsoleUtils.formatCell(String.format("%.2f", consumption.getValue()), 20)
+            );
+        }
+
+        ConsoleUtils.printLine('=', 100);
+    }
+
+    private void displayDetailedReport(int userId, String reportType, List<Double> averages) {
+        System.out.println(ConsoleUtils.CYAN + ConsoleUtils.BOLD + "\nDetailed Carbon Consumption Report" + ConsoleUtils.RESET);
+        ConsoleUtils.printLine('=', 100);
+        System.out.println(
+                ConsoleUtils.formatCell("User ID", 30) + "| " +
+                        ConsoleUtils.formatCell("Report Type", 40) + "| " +
+                        ConsoleUtils.formatCell("Average Consumption (kg)", 40)
+        );
+        ConsoleUtils.printLine('-', 100);
+
+        for (int i = 0; i < averages.size(); i++) {
+            System.out.println(
+                    ConsoleUtils.formatCell(String.valueOf(userId), 30) + "| " +
+                            ConsoleUtils.formatCell(reportType + " #" + (i + 1), 40) + "| " +
+                            ConsoleUtils.formatCell(String.format("%.2f", averages.get(i)), 40)
+            );
+        }
+
+        ConsoleUtils.printLine('=', 100);
     }
 
     private void displayReport(int userId, String reportType, double average) {
