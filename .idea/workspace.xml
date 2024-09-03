@@ -9,6 +9,7 @@
       <change beforePath="$PROJECT_DIR$/src/services/ConsumptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/ConsumptionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/ConsoleUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/ConsoleUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +46,7 @@
     "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "story/JOB-106",
+    "git-widget-placeholder": "dev",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",

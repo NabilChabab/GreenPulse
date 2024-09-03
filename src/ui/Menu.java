@@ -130,7 +130,7 @@ public class Menu {
     }
 
     private String getUserInput(String str) {
-        System.out.println(str);
+        System.out.print(str);
         return scanner.nextLine().trim();
     }
 

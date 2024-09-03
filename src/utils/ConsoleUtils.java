@@ -12,9 +12,9 @@ public class ConsoleUtils {
     public static final String BOLD = "\u001B[1m";
     public static final String UNDERLINE = "\u001B[4m";
 
-    public static void printLine(char character, int length) {
+    public static void printLine(String str, int length) {
         for (int i = 0; i < length; i++) {
-            System.out.print(character);
+            System.out.print(str);
         }
         System.out.println();
     }

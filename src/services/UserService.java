@@ -95,7 +95,6 @@ public class UserService {
                 return;
             }
 
-            // Get averages based on report type
             switch (reportType.toLowerCase()) {
                 case "daily":
                     List<Double> dailyAverages = consumptionService.getDailyAverages(user, consumptions.get(0).getStartDate(), consumptions.get(consumptions.size() - 1).getEndDate());
@@ -123,14 +122,14 @@ public class UserService {
 
     private void displayAllConsumptions(List<ConsumptionEntity> consumptions) {
         System.out.println(ConsoleUtils.CYAN + ConsoleUtils.BOLD + "\nAll Consumptions" + ConsoleUtils.RESET);
-        ConsoleUtils.printLine('=', 100);
+        ConsoleUtils.printLine("=" + ConsoleUtils.RED, 100);
         System.out.println(
                 ConsoleUtils.formatCell("Consumption ID", 20) + "| " +
                         ConsoleUtils.formatCell("Start Date", 30) + "| " +
                         ConsoleUtils.formatCell("End Date", 30) + "| " +
                         ConsoleUtils.formatCell("Value (kg)", 20)
         );
-        ConsoleUtils.printLine('-', 100);
+        ConsoleUtils.printLine("=", 100);
 
         for (ConsumptionEntity consumption : consumptions) {
             System.out.println(
@@ -141,18 +140,18 @@ public class UserService {
             );
         }
 
-        ConsoleUtils.printLine('=', 100);
+        ConsoleUtils.printLine("=", 100);
     }
 
     private void displayDetailedReport(int userId, String reportType, List<Double> averages) {
         System.out.println(ConsoleUtils.CYAN + ConsoleUtils.BOLD + "\nDetailed Carbon Consumption Report" + ConsoleUtils.RESET);
-        ConsoleUtils.printLine('=', 100);
+        ConsoleUtils.printLine('=' + ConsoleUtils.BLUE, 100);
         System.out.println(
                 ConsoleUtils.formatCell("User ID", 30) + "| " +
                         ConsoleUtils.formatCell("Report Type", 40) + "| " +
                         ConsoleUtils.formatCell("Average Consumption (kg)", 40)
         );
-        ConsoleUtils.printLine('-', 100);
+        ConsoleUtils.printLine("-", 100);
 
         for (int i = 0; i < averages.size(); i++) {
             System.out.println(
@@ -162,25 +161,9 @@ public class UserService {
             );
         }
 
-        ConsoleUtils.printLine('=', 100);
+        ConsoleUtils.printLine("=", 100);
     }
 
-    private void displayReport(int userId, String reportType, double average) {
-        System.out.println(ConsoleUtils.CYAN + ConsoleUtils.BOLD + "\nCarbon Consumption Report" + ConsoleUtils.RESET);
-        ConsoleUtils.printLine('=', 100);
-        System.out.println(
-                ConsoleUtils.formatCell("User ID", 30) + "| " +
-                        ConsoleUtils.formatCell("Report Type", 40) + "| " +
-                        ConsoleUtils.formatCell("Average Consumption (kg)", 40)
-        );
-        ConsoleUtils.printLine('-', 100);
-        System.out.println(
-                ConsoleUtils.formatCell(String.valueOf(userId), 30) + "| " +
-                        ConsoleUtils.formatCell(reportType, 40) + "| " +
-                        ConsoleUtils.formatCell(String.format("%.2f", average), 40)
-        );
-        ConsoleUtils.printLine('=', 100);
-    }
 
 
 
