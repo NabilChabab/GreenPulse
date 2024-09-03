@@ -9,7 +9,6 @@
       <change beforePath="$PROJECT_DIR$/src/services/ConsumptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/ConsumptionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/Menu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/DateUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/DateUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

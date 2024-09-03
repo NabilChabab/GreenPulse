@@ -93,7 +93,6 @@ public class Menu {
     }
 
     private void generateReportForUserById() {
-        UserEntity user = new UserEntity();
         int userId = getUserInputAsInt("Enter user ID to generate report: ");
         System.out.println("Choose report type:");
         System.out.println("1. Daily");
