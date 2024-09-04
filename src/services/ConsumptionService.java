@@ -75,8 +75,4 @@ public class ConsumptionService {
         return total;
     }
 
-    private long getDaysBetween(Date startDate, Date endDate) {
-        long diffInMillis = endDate.getTime() - startDate.getTime();
-        return TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
-    }
 }

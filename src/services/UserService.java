@@ -6,6 +6,10 @@ import entities.UserEntity;
 import utils.ConsoleUtils;
 import utils.DateUtils;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,12 +39,12 @@ public class UserService {
         }
     }
 
-    public void updateUser(int userId, int choice, String naame, int age){
+    public void updateUser(int userId, int choice, String name, int age){
         UserEntity user = userMap.get(userId);
         if (user != null) {
             switch (choice) {
                 case 1:
-                    user.setName(naame);
+                    user.setName(name);
                     System.out.println("Name updated successfully.");
                     break;
                 case 2:
@@ -68,13 +72,26 @@ public class UserService {
 
         if (user != null) {
             try {
+                Date newStartDate = DateUtils.parseDate(startDate);
+                Date newEndDate = DateUtils.parseDate(endDate);
+
+                for (ConsumptionEntity existingConsumption : user.getConsumptions()) {
+                    Date existingStartDate = existingConsumption.getStartDate();
+                    Date existingEndDate = existingConsumption.getEndDate();
+
+                    if (!(newEndDate.before(existingStartDate) || newStartDate.after(existingEndDate))) {
+                        System.out.println("The consumption period not available. Please choose different dates.");
+                        return;
+                    }
+                }
                 ConsumptionEntity consumption = new ConsumptionEntity();
-                consumption.setStartDate(DateUtils.parseDate(startDate));
-                consumption.setEndDate(DateUtils.parseDate(endDate));
+                consumption.setStartDate(newStartDate);
+                consumption.setEndDate(newEndDate);
                 consumption.setValue(value);
 
                 user.addConsumption(consumption);
                 System.out.println("Carbon consumption added successfully for user ID: " + userId);
+
             } catch (Exception e) {
                 System.out.println("Error adding consumption: " + e.getMessage());
             }
@@ -82,6 +99,7 @@ public class UserService {
             System.out.println("User not found with ID: " + userId);
         }
     }
+
 
 
 
