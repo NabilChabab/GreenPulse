@@ -2,16 +2,19 @@ package entities;
 
 import java.util.Date;
 
-public class ConsumptionEntity {
+public abstract class ConsumptionEntity {
 
-    private static int idCounter = 1;
     private int id;
     private Date startDate;
     private Date endDate;
     private double value;
+    private double consumptionImpact;
+    private ConsumptionType consumptionType;
 
-    public ConsumptionEntity() {
-        this.id = idCounter++;
+    public ConsumptionEntity(Date startDate, Date endDate, Float value) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.value = value;
     }
 
     public int getId() {
@@ -41,6 +44,24 @@ public class ConsumptionEntity {
     public void setValue(double value) {
         this.value = value;
     }
+
+    public double getConsumptionImpact() {
+        return consumptionImpact;
+    }
+
+    public void setConsumptionImpact(double consumptionImpact) {
+        this.consumptionImpact = consumptionImpact;
+    }
+
+    public ConsumptionType getConsumptionType() {
+        return consumptionType;
+    }
+
+    public void setConsumptionType(ConsumptionType consumptionType) {
+        this.consumptionType = consumptionType;
+    }
+
+    public abstract double calculateConsumptionImpact();
 
     @Override
     public String toString() {

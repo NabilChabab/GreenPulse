@@ -1,8 +1,7 @@
-import Database.Database;
+import Config.Database;
 import services.UserService;
 import ui.Menu;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 

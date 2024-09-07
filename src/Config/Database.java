@@ -1,4 +1,4 @@
-package Database;
+package Config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class Database {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/green_pulse";
-    private static final String USER = "GreenPulse";
-    private static final String PASSWORD = "1234";
+    private static final String URL = System.getenv("DATABASE_URL");
+    private static final String USER = System.getenv("DATABASE_USERNAME");
+    private static final String PASSWORD = System.getenv("DATABASE_PASSWORD");
 
     private static Database instance;
     private Connection connection;

@@ -14,8 +14,8 @@ public class UserEntity {
 
     private static int idCounter = 1;
 
-    public UserEntity(String name, int age) {
-        this.id = idCounter++;
+    public UserEntity(int id , String name, int age) {
+        this.id = id;
         this.name = name;
         this.age = age;
         consumptions = new ArrayList<>();
@@ -38,6 +38,10 @@ public class UserEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getAge() {
+        return age;
     }
 
     public void setAge(int age) {

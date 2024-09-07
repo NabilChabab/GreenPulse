@@ -1,6 +1,7 @@
 package ui;
 
 import entities.UserEntity;
+import repository.UserRepository;
 import services.UserService;
 import utils.ConsoleUtils;
 
@@ -14,6 +15,7 @@ public class Menu {
     public Menu(UserService userService) {
         this.userService = userService;
         this.scanner = new Scanner(System.in);
+
     }
 
     public void start() {

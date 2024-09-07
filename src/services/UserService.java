@@ -3,12 +3,11 @@ package services;
 import entities.ConsumptionEntity;
 import entities.UserEntity;
 
+import repository.UserRepository;
 import utils.ConsoleUtils;
 import utils.DateUtils;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,17 +19,23 @@ public class UserService {
 
     private ConsumptionService consumptionService = new ConsumptionService();
 
+    private UserRepository userRepository = new UserRepository();
+
+    public UserService() throws SQLException {
+    }
+
 
     public void createUser(String name, int age){
-
-        UserEntity user = new UserEntity(name, age);
+        int id = userMap.size() + 1;
+        UserEntity user = new UserEntity(id ,name, age);
         userMap.put(user.getId(), user);
+        userRepository.add(user);
         System.out.println("User created: " + user);
     }
 
 
     public void showUser(int userId){
-        UserEntity user = userMap.get(userId);
+        UserEntity user = userRepository.getById(userId);
         if (user != null) {
             System.out.println("User Details: " + user);
             System.out.println("Total Carbon Consumption: " + user.calculateTotalCarbon() + " kg");
@@ -54,6 +59,7 @@ public class UserService {
                 default:
                     System.out.println("Invalid choice.");
             }
+            userRepository.update(user);
         } else {
             System.out.println("User not found.");
         }
@@ -61,6 +67,7 @@ public class UserService {
 
     public void deleteUser(int userId){
         if (userMap.remove(userId) != null) {
+            userRepository.delete(userId);
             System.out.println("User deleted successfully.");
         } else {
             System.out.println("User not found.");
