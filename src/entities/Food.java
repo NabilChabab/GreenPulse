@@ -1,27 +1,22 @@
 package entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-public class Food extends ConsumptionEntity {
+public class Food extends Consumption {
 
-    private int id;
     private String foodType;
     private double weight;
 
-    public Food(Date startDate, Date endDate, Float value ,int id ,  String foodType, double weight) {
-        super(startDate, endDate, value);
-        this.id = id;
+    public Food(LocalDate startDate, LocalDate endDate, double value , User user, String foodType, double weight) {
+        super(startDate, endDate, value , user);
         this.foodType = foodType;
         this.weight = weight;
     }
 
-    @Override
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
+    public Food(){
+
     }
 
     public String getFoodType() {
@@ -42,7 +37,12 @@ public class Food extends ConsumptionEntity {
 
     @Override
     public double calculateConsumptionImpact() {
-        System.out.println("Calculating consumption impact for food");
-        return 0;
+        double impact = 0.0;
+        if ("meet".equalsIgnoreCase(foodType)) {
+            impact = 5.0;
+        } else if ("vegetable".equalsIgnoreCase(foodType)) {
+            impact = 0.5;
+        }
+        return impact * weight;
     }
 }

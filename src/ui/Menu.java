@@ -1,10 +1,14 @@
 package ui;
 
-import entities.UserEntity;
-import repository.UserRepository;
+import entities.*;
+import entities.enums.ConsumptionType;
 import services.UserService;
 import utils.ConsoleUtils;
+import utils.DateUtils;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Menu {
@@ -27,7 +31,9 @@ public class Menu {
             System.out.println("4. Delete a User");
             System.out.println("5. Add Carbon Consumption for User");
             System.out.println("6. Generate Consumption Report for Specific User");
-            System.out.println("7. Exit");
+            System.out.println("7. Get All Users With There Consumptions");
+            System.out.println("8. Exit");
+
 
             int choice = getUserInputAsInt("Choose an option: ");
 
@@ -51,6 +57,9 @@ public class Menu {
                     generateReportForUserById();
                     break;
                 case 7:
+                    findUsersWithConsumptions();
+                    break;
+                case 8:
                     System.out.println(ConsoleUtils.GREEN + "Thank you for using the application. Goodbye!" + ConsoleUtils.RESET);
                     System.exit(0);
                     break;
@@ -65,6 +74,7 @@ public class Menu {
         String name = getUserInput("Enter name: ");
         int age = getUserInputAsInt("Enter age: ");
         userService.createUser(name, age);
+        System.out.println(ConsoleUtils.GREEN + "User created successfully." + ConsoleUtils.RESET);
     }
 
     private void showUser() {
@@ -81,9 +91,11 @@ public class Menu {
         if (choice == 1) {
             String newName = getUserInput("Enter new name: ");
             userService.updateUser(id, choice, newName, -1);
+            System.out.println(ConsoleUtils.GREEN + "User updated successfully." + ConsoleUtils.RESET);
         } else if (choice == 2) {
             int newAge = getUserInputAsInt("Enter new age: ");
             userService.updateUser(id, choice, null, newAge);
+            System.out.println(ConsoleUtils.GREEN + "User updated successfully." + ConsoleUtils.RESET);
         } else {
             System.out.println("Invalid choice.");
         }
@@ -124,12 +136,113 @@ public class Menu {
 
     private void addConsumptionForUser() {
         int userId = getUserInputAsInt("Enter user ID to add consumption: ");
-        String startDate = getUserInput("Enter start date (yyyy-mm-dd): ");
-        String endDate = getUserInput("Enter end date (yyyy-mm-dd): ");
+        Optional<User> userOptional = userService.showUser(userId);
+        if (!userOptional.isPresent()) {
+            System.out.println(ConsoleUtils.RED + "User not found." + ConsoleUtils.RESET);
+            return;
+        }
+        User user = userOptional.get();
+
+        LocalDate startDate = DateUtils.parseDate(getUserInput("Enter start date (yyyy-mm-dd): "));
+        LocalDate endDate = DateUtils.parseDate(getUserInput("Enter end date (yyyy-mm-dd): "));
         double value = getUserInputAsDouble("Enter carbon consumption value: ");
 
-        userService.addConsumptionForUser(userId, startDate, endDate, value);
+        System.out.println("Choose consumption type:");
+        System.out.println("1. Housing");
+        System.out.println("2. Transport");
+        System.out.println("3. Food");
+        int typeChoice = getUserInputAsInt("Enter your choice: ");
+
+        Consumption consumption;
+
+        switch (typeChoice) {
+            case 1:
+                String energyType = getUserInput("Enter energy type (electricity , gaz) : ");
+                double energyConsumption = getUserInputAsDouble("Enter energy consumption: ");
+                consumption = new Housing(startDate, endDate, value, user , energyType, energyConsumption);
+                consumption.setConsumptionType(ConsumptionType.HOUSING);
+                break;
+            case 2:
+                double distance = getUserInputAsDouble("Enter distance: ");
+                String transportType = getUserInput("Enter transport type (train , car)  : ");
+                consumption = new Transport(startDate, endDate, value, user,  transportType , distance);
+                consumption.setConsumptionType(ConsumptionType.TRANSPORT);
+                break;
+            case 3:
+                String foodType = getUserInput("Enter food type (meet , vegetables) : ");
+                double quantity = getUserInputAsDouble("Enter quantity: ");
+                consumption = new Food(startDate, endDate, value, user, foodType, quantity);
+                consumption.setConsumptionType(ConsumptionType.FOOD);
+                break;
+            default:
+                System.out.println(ConsoleUtils.RED + "Invalid choice." + ConsoleUtils.RESET);
+                return;
+        }
+
+        System.out.println("User: " + consumption.getUser());
+        System.out.println("Consumption Type: " + consumption.getConsumptionType());
+
+        userService.saveConsumptionForUser(consumption);
+        System.out.println(ConsoleUtils.GREEN + "Consumption added successfully." + ConsoleUtils.RESET);
     }
+
+    private void findUsersWithConsumptions() {
+        List<User> users = userService.findUsersWithConsumptions();
+        if (users.isEmpty()) {
+            System.out.println(ConsoleUtils.RED + "No users found with consumptions." + ConsoleUtils.RESET);
+            return;
+        }
+
+        // Header
+        System.out.println(ConsoleUtils.GREEN + "========================================");
+        System.out.println("  Users with Consumptions");
+        System.out.println("========================================" + ConsoleUtils.RESET);
+
+        // Iterate through each user and display their data
+        for (User user : users) {
+            System.out.println(ConsoleUtils.CYAN + "User ID: " + user.getId() + " | Name: " + user.getName() + " | Age: " + user.getAge() + ConsoleUtils.RESET);
+
+            List<Consumption> consumptions = user.getConsumptions();
+            if (consumptions.isEmpty()) {
+                System.out.println(ConsoleUtils.RED + "  No consumptions found for this user." + ConsoleUtils.RESET);
+            } else {
+                // Table header for consumptions
+                System.out.println(ConsoleUtils.YELLOW + "  --------------------------------------------------------------------------");
+                System.out.println("  | Consumption ID | Type       | Value   | Impact  | Additional Info        |");
+                System.out.println("  --------------------------------------------------------------------------" + ConsoleUtils.RESET);
+
+                for (Consumption consumption : consumptions) {
+                    String additionalInfo = "";
+
+                    // Specific details based on consumption type
+                    if (consumption instanceof Transport) {
+                        Transport transport = (Transport) consumption;
+                        additionalInfo = "Distance: " + transport.getDistance() + "km, Vehicle: " + transport.getTransportType();
+                    } else if (consumption instanceof Housing) {
+                        Housing housing = (Housing) consumption;
+                        additionalInfo = "Energy: " + housing.getEnergyConsumption() + ", Type: " + housing.getEnergyType();
+                    } else if (consumption instanceof Food) {
+                        Food food = (Food) consumption;
+                        additionalInfo = "Food: " + food.getFoodType() + ", Weight: " + food.getWeight() + "kg";
+                    }
+
+                    // Table row for each consumption
+                    System.out.printf(ConsoleUtils.WHITE + "  | %-14d | %-10s | %-7.2f | %-7.2f | %-25s |%n",
+                            consumption.getId(),
+                            consumption.getConsumptionType(),
+                            consumption.getValue(),
+                            consumption.getConsumptionImpact(),
+                            additionalInfo);
+                }
+
+                // End table line
+                System.out.println(ConsoleUtils.YELLOW + "  --------------------------------------------------------------------------" + ConsoleUtils.RESET);
+            }
+        }
+    }
+
+
+
 
     private String getUserInput(String str) {
         System.out.print(str);

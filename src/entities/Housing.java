@@ -1,27 +1,20 @@
 package entities;
 
+import java.time.LocalDate;
 import java.util.Date;
 
-public class Housing extends ConsumptionEntity {
+public class Housing extends Consumption {
 
-    private int id;
     private String energyType;
     private double energyConsumption;
 
-    public Housing(Date startDate, Date endDate, Float value, int id, String energyType, double energyConsumption) {
-        super(startDate, endDate, value);
-        this.id = id;
+    public Housing(LocalDate startDate, LocalDate endDate, double value,User user, String energyType, double energyConsumption) {
+        super(startDate, endDate, value , user);
         this.energyType = energyType;
         this.energyConsumption = energyConsumption;
     }
 
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public Housing() {
     }
 
     public String getEnergyType() {
@@ -42,7 +35,14 @@ public class Housing extends ConsumptionEntity {
 
     @Override
     public double calculateConsumptionImpact() {
-        System.out.println("Calculating consumption impact for housing");
-        return 0;
+        double impact = 0.0;
+
+        if ("electricity".equalsIgnoreCase(energyType)) {
+            impact = 1.5;
+        } else if ("gaz".equalsIgnoreCase(energyType)) {
+            impact = 2.0;
+        }
+
+        return impact * energyConsumption;
     }
 }
