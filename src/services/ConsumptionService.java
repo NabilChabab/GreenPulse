@@ -85,4 +85,6 @@ public class ConsumptionService {
         return 0.0;
     }
 
+
+
 }
