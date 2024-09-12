@@ -6,20 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3660c6cb-c7be-4a8f-ac53-1c4d9b7149f1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GreenPulseJava.iml" beforeDir="false" afterPath="$PROJECT_DIR$/GreenPulseJava.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/ConsumptionEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/Consumption.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/ConsumptionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/enums/ConsumptionType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/Food.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/Food.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/Housing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/Housing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/Transport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/Transport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/entities/UserEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repository/RepositoryInterface.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/ConsumptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/ConsumptionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/Menu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/DateUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/DateUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +110,7 @@
       <workItem from="1725524031109" duration="1309000" />
       <workItem from="1725535041916" duration="54144000" />
       <workItem from="1725891334366" duration="11558000" />
-      <workItem from="1725954508190" duration="37647000" />
+      <workItem from="1725954508190" duration="49866000" />
     </task>
     <servers />
   </component>

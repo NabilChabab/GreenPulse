@@ -32,7 +32,8 @@ public class Menu {
             System.out.println("5. Add Carbon Consumption for User");
             System.out.println("6. Generate Consumption Report for Specific User");
             System.out.println("7. Get All Users With There Consumptions");
-            System.out.println("8. Exit");
+            System.out.println("8. Get All Users With Total Consumptions greater than 3000 KgCO2eq");
+            System.out.println("9. Exit");
 
 
             int choice = getUserInputAsInt("Choose an option: ");
@@ -60,6 +61,9 @@ public class Menu {
                     findUsersWithConsumptions();
                     break;
                 case 8:
+                    findUsersWithSupTotalConsumptions();
+                    break;
+                case 9:
                     System.out.println(ConsoleUtils.GREEN + "Thank you for using the application. Goodbye!" + ConsoleUtils.RESET);
                     System.exit(0);
                     break;
@@ -240,6 +244,57 @@ public class Menu {
             }
         }
     }
+
+    private void findUsersWithSupTotalConsumptions(){
+        List<User> users = userService.findUsers();
+        if (users.isEmpty()) {
+            System.out.println(ConsoleUtils.RED + "No users found with total consumptions greater than 3000 KgCO2eq." + ConsoleUtils.RESET);
+            return;
+        }
+
+        // Header
+        System.out.println(ConsoleUtils.GREEN + "========================================");
+        System.out.println("  Users with Total Consumptions > 3000 KgCO2eq");
+        System.out.println("========================================" + ConsoleUtils.RESET);
+
+        // Iterate through each user and display their data
+        for (User user : users) {
+            System.out.println(ConsoleUtils.CYAN + "User ID: " + user.getId() + " | Name: " + user.getName() + " | Age: " + user.getAge() + ConsoleUtils.RESET);
+
+            List<Consumption> consumptions = user.getConsumptions();
+            if (consumptions.isEmpty()) {
+                System.out.println(ConsoleUtils.RED + "  No consumptions found for this user." + ConsoleUtils.RESET);
+            } else {
+                // Table header for consumptions
+                System.out.println(ConsoleUtils.BLUE + "  --------------------------------------------------------------------------");
+                System.out.println("  | Consumption ID | Type       | Value   | Impact  | Additional Info        |");
+                System.out.println("  --------------------------------------------------------------------------" + ConsoleUtils.RESET);
+
+
+                for (Consumption consumption : consumptions) {
+                    String additionalInfo = "";
+
+                    // Specific details based on consumption type
+                    if (consumption instanceof Transport) {
+                        Transport transport = (Transport) consumption;
+                        additionalInfo = "Distance: " + transport.getDistance() + "km, Vehicle: " + transport.getTransportType();
+                    } else if (consumption instanceof Housing) {
+                        Housing housing = (Housing) consumption;
+                        additionalInfo = "Energy: " + housing.getEnergyConsumption() + ", Type: " + housing.getEnergyType();
+                    } else if (consumption instanceof Food) {
+                        Food food = (Food) consumption;
+                        additionalInfo = "Food: " + food.getFoodType() + ", Weight: " + food.getWeight() + "kg";
+                    }
+
+                    // Table row for each consumption
+                    System.out.printf(ConsoleUtils.BLUE + "  | %-14d | %-10s | %-7.2f | %-7.2f | %-25s |%n",
+                            consumption.getId(),
+                            consumption.getConsumptionType(),
+                            consumption.getValue(),
+                            consumption.getConsumptionImpact(),
+                            additionalInfo);
+                }
+            }}}
 
 
 
