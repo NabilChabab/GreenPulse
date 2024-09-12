@@ -8,9 +8,12 @@ import repository.UserRepository;
 import utils.ConsoleUtils;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 public class UserService {
@@ -72,40 +75,56 @@ public class UserService {
         return userRepository.findAllUsersWithConsumptions();
     }
 
+
+    public List<User> findUsers(){
+        List<User> users = findUsersWithConsumptions();
+        return users.stream().filter(e -> e.getConsumptions().stream().mapToDouble(Consumption::getConsumptionImpact).sum() > 3000).collect(Collectors.toList());
+    }
+
     public void generateReportForUserById(int userId, String reportType) {
-        User user = userMap.get(userId);
+        Optional<User> user = userRepository.findById(userId);
 
-        if (user != null) {
-            List<Consumption> consumptions = user.getConsumptions();
-            if (consumptions.isEmpty()) {
-                System.out.println(ConsoleUtils.RED + "No consumption data found for user." + ConsoleUtils.RESET);
-                return;
-            }
-
-            switch (reportType.toLowerCase()) {
-                case "daily":
-                    List<Double> dailyAverages = consumptionService.getDailyAverages(user, consumptions.get(0).getStartDate(), consumptions.get(consumptions.size() - 1).getEndDate());
-                    displayDetailedReport(userId, reportType, dailyAverages);
-                    break;
-                case "weekly":
-                    List<Double> weeklyAverages = consumptionService.getWeeklyAverages(user, consumptions.get(0).getStartDate(), consumptions.get(consumptions.size() - 1).getEndDate());
-                    displayDetailedReport(userId, reportType, weeklyAverages);
-                    break;
-                case "monthly":
-                    List<Double> monthlyAverages = consumptionService.getMonthlyAverages(user, consumptions.get(0).getStartDate(), consumptions.get(consumptions.size() - 1).getEndDate());
-                    displayDetailedReport(userId, reportType, monthlyAverages);
-                    break;
-                default:
-                    System.out.println(ConsoleUtils.RED + "Invalid report type." + ConsoleUtils.RESET);
-                    return;
-            }
-
-            displayAllConsumptions(consumptions);
-
-        } else {
+        if (user.isEmpty()) {
             System.out.println(ConsoleUtils.RED + "User not found." + ConsoleUtils.RESET);
+            return;
+        }
+
+        List<Consumption> consumptions = user.get().getConsumptions();
+        if (consumptions.isEmpty()) {
+            System.out.println(ConsoleUtils.RED + "No consumption data found for user." + ConsoleUtils.RESET);
+            return;
+        }
+
+        LocalDate startDate = consumptions.get(0).getStartDate();
+        LocalDate endDate = consumptions.get(consumptions.size() - 1).getEndDate();
+
+        // Define a functional interface to get averages
+        Function<User, List<Double>> averageFunction = getAveragesFunction(reportType.toLowerCase());
+
+        if (averageFunction == null) {
+            System.out.println(ConsoleUtils.RED + "Invalid report type." + ConsoleUtils.RESET);
+            return;
+        }
+
+        List<Double> averages = averageFunction.apply(user.get());
+        displayDetailedReport(userId, reportType, averages);
+        displayAllConsumptions(consumptions);
+    }
+
+    // Helper method to return the correct function for the report type
+    private Function<User, List<Double>> getAveragesFunction(String reportType) {
+        switch (reportType) {
+            case "daily":
+                return (user) -> consumptionService.getDailyAverages(user, user.getConsumptions().get(0).getStartDate(), user.getConsumptions().get(user.getConsumptions().size() - 1).getEndDate());
+            case "weekly":
+                return (user) -> consumptionService.getWeeklyAverages(user, user.getConsumptions().get(0).getStartDate(), user.getConsumptions().get(user.getConsumptions().size() - 1).getEndDate());
+            case "monthly":
+                return (user) -> consumptionService.getMonthlyAverages(user, user.getConsumptions().get(0).getStartDate(), user.getConsumptions().get(user.getConsumptions().size() - 1).getEndDate());
+            default:
+                return null;
         }
     }
+
 
     private void displayAllConsumptions(List<Consumption> consumptions) {
         System.out.println(ConsoleUtils.CYAN + ConsoleUtils.BOLD + "\nAll Consumptions" + ConsoleUtils.RESET);
